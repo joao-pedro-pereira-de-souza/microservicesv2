@@ -1,0 +1,42 @@
+version: '3'
+services:
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--requirepass", "${DB_REDIS_PASSWORD}"]
+    environment:
+      REDIS_PASSWORD: ${DB_REDIS_PASSWORD}
+    ports:
+      - "${DB_REDIS_PORT}:6379"
+  api:
+    build: ./api
+    env_file:
+      - ./api/.env
+    environment:
+      - DB_REDIS_HOST=${DB_REDIS_HOST}
+      - DB_REDIS_PORT=${DB_REDIS_PORT}
+      - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}
+    ports:
+      - "2031:3366"
+    depends_on:
+      - job
+      - redis
+    volumes:
+      - ./volumes/uploads:/usr/src/app/uploads
+  job:
+    build: ./job
+    ports:
+      - "2024:3366"
+    depends_on:
+      - redis
+    environment:
+      - DB_REDIS_HOST=${DB_REDIS_HOST}
+      - DB_REDIS_PORT=${DB_REDIS_PORT}
+      - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}
+    networks:
+      - default
+  app:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+networks:
+  default:

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./@types"],
+    "target": "ES2023",
+    "module": "commonjs",
+    "strict": true,
+    "baseUrl": ".",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@root/*": ["./*"],
+      "@src/*": ["./src/*"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@security/*": ["./src/security/*"],
+      "@schema/*": ["./src/schema/*"],
+      "@error/*": ["./src/error/*"],
+      "@regex/*": ["./src/regex/*"],
+      "@upload/*": ["./src/upload/*"],
+      "@bull/*": ["./src/bull/*"],
+      "@prisma/*": ["./prisma/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}
