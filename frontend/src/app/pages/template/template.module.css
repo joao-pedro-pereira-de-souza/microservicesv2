@@ -1,0 +1,74 @@
+.page {
+  --gray-rgb: 0, 0, 0;
+
+  --button-primary-hover: #383838;
+  --button-secondary-hover: #f2f2f2;
+
+  min-height: 100svh;
+  gap: 64px;
+  font-family: var(--font-geist-sans);
+  background: var(--background);
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --gray-rgb: 255, 255, 255;
+    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
+    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+
+    --button-primary-hover: #ccc;
+    --button-secondary-hover: #1a1a1a;
+  }
+}
+
+.container {
+  width: 70%;
+}
+
+.container_view_pdf {
+  padding: 1rem;
+}
+
+.container_variables {
+  padding: 1rem;
+}
+
+.container_list_variables {
+  width: 100%;
+  height: 50vh;
+  overflow-y: scroll;
+  padding: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.container_input_add {
+  width: 100%;
+  padding: 1rem;
+  background: var(--back_secundary);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.button_input_add {
+  cursor: pointer;
+}
+
+.container_result {
+  padding: 1rem;
+}
+
+.button_create_pdf {
+  position: relative;
+  right: 0px;
+  top: 0px;
+}
+.container_result_items {
+  background: var(--foreground);
+  width: 100%;
+  padding: 1rem;
+}

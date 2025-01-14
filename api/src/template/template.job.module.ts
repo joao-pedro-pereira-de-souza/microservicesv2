@@ -1,4 +1,6 @@
 import { BullService } from "@bull/bull.service";
+import { Job } from 'bull';
+
 export class TemplateJobModule extends BullService {
   constructor() {
     super("template");
@@ -9,9 +11,6 @@ export class TemplateJobModule extends BullService {
   }
 
   private events() {
-    this.queue.on("global:completed", (data) => {
-      console.log(`${this.name} completed`, data);
-    });
 
     this.queue.on("global:error", (data) => {
       console.log(`${this.name} error`, data);

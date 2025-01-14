@@ -1,8 +1,7 @@
 import express, { Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
-import { Server } from "http";
+import Http, { Server } from "http";
 
 import { RoutesMiddlewareService } from "@middleware/services/routes.service";
 
@@ -11,7 +10,8 @@ import { ErrorMiddlewareService } from "@root/src/middleware/services/error.serv
 
 import {UploadsModule} from '@upload/upload.module'
 export class AppServer {
-  constructor(public readonly app: Express) {}
+  constructor(public readonly app: Express, public readonly http: Server ) {}
+
 
   static getInstance() {
     const app = express();
@@ -46,7 +46,8 @@ export class AppServer {
     RoutesMiddlewareService.inicialize(app);
     ErrorMiddlewareService.inicialize(app);
 
-    return new AppServer(app);
+    const http = Http.createServer(app);
+    return new AppServer(app, http);
   }
 
   #listenerCallback() {
@@ -55,7 +56,7 @@ export class AppServer {
 
   inicialize(): Server | void {
     if (process.env.NODE_ENV !== "test") {
-      return this.app.listen(process.env.PORT || 3132, () =>
+      return this.http.listen(process.env.PORT || 3132, () =>
         this.#listenerCallback()
       );
     }

@@ -1,12 +1,14 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #91AEC1;
+  --foreground: #BFD7EA;
+  --back_secundary: #6e899b;
+  --back_secundary02: #627b8b;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #91AEC1;
+    --foreground: #BFD7EA;
   }
 }
 
@@ -14,6 +16,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+
 }
 
 body {
@@ -28,6 +31,7 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  color: #fff;
 }
 
 a {
