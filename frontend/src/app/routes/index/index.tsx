@@ -1,5 +1,5 @@
 "use client";
-
+import {useState, useEffect} from 'react'
 import styles from "./index.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -11,20 +11,35 @@ import {
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useNavigate } from "react-router-dom";
-import { Api } from '../../../services/api/index';
+import { Api } from '../../../services/api';
 
-import { Storage } from '../../../services/storage/index';
-const PdfList = dynamic(() => import("../../components/pdfList/pdf.list"), {
+import { Storage } from '../../../services/storage';
+const PdfList = dynamic(() => import("../../../../teste/pdfList/pdf.list"), {
   ssr: false,
 });
 
-export default function Home() {
-  const api = Api.instance();
-  const storage = new Storage();
+export default  function Home() {
 
-  const pdfList = api.template.list();
+  const [templateList, setTemplateList] = useState({});
 
-  storage.template.set(JSON.stringify(pdfList));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const api = Api.instance();
+        const storage = new Storage();
+
+        const data = await api.template.list();
+
+        console.log({list:data})
+        setTemplateList(data);
+        storage.template.set(JSON.stringify(data));
+      } catch (error) {
+        console.error("Erro ao buscar os templates:", error);
+      }
+    };
+
+    fetchData();
+  }, [])
 
   const navigate = useNavigate();
 
@@ -91,7 +106,7 @@ export default function Home() {
 
       <div className={styles.container_templates}>
         <h1>Templates </h1>
-        <PdfList pdfUrls={pdfList.items} navigate={navigate} />
+         {Object.keys(templateList).length ? <PdfList pdfUrls={(templateList as any).items } navigate={navigate} />: <p>Teste</p> }
       </div>
 
       <footer className={styles.footer}></footer>

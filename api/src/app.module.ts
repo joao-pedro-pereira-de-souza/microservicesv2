@@ -31,10 +31,6 @@ export class AppServer {
 
     app.use("/uploads", express.static(UploadsModule.path_public));
 
-    console.log({
-      teste: process.env.SIGNATURE_COOKIE,
-      DB_REDIS_HOST: process.env.DB_REDIS_HOST,
-    });
     if (
       !RateLimitedMiddlewareService.unlimitedEnvironments.includes(
         String(process.env.NODE_ENV)

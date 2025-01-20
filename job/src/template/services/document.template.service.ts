@@ -1,6 +1,7 @@
 import { mkdtemp, mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { rmSync } from "fs";
+import bull from 'bull'
 
 import { DocumentConvert } from "@root/src/document/services/document.service";
 import {InternalServerError} from '@error/erros.mudule'
@@ -25,7 +26,7 @@ interface ParamsDropFolderInterface {
 export class DocumentTemplateService {
   private static async setupFolderTemp(){
     try {
-      const pathTemp = path.resolve(path.dirname(__dirname), '../', '../', '../', "temp");
+      const pathTemp = path.resolve(path.dirname(__dirname), '../', '../', "temp");
 
        console.log({pathTemp});
       await mkdir(pathTemp, { recursive: true });
@@ -35,11 +36,7 @@ export class DocumentTemplateService {
         data: { path: folderTemp },
       };
     } catch (error) {
-       console.log('======================== erro no setup folder ================')
-       console.log({ error })
-       console.log(
-         "======================== end erro no setup folder ================"
-       );
+
 
       throw new InternalServerError("setupFolderTemp Error", error );
     }
@@ -66,6 +63,7 @@ export class DocumentTemplateService {
 
       let bufferString = file.toString();
 
+      console.log({ xml: bufferString });
       if (Object.entries(data).length) {
         for (const [key, property] of Object.entries(data)) {
           const regex = new RegExp(`\\${key}`, "g");
@@ -83,6 +81,7 @@ export class DocumentTemplateService {
   }
 
   static async useTemplate(
+    job: bull.Job,
     params: ParamsUseTemplateInterface
   ){
     try {
@@ -91,6 +90,7 @@ export class DocumentTemplateService {
       const fullNamePdfTemplate = "template.pdf";
 
       const responsePathTemp = await this.setupFolderTemp();
+      job.progress(15)
 
       const sourceTemplate = `${responsePathTemp.data?.path}/`;
       const pathFilePdf = `${sourceTemplate + fullNamePdfTemplate}`;
@@ -102,6 +102,9 @@ export class DocumentTemplateService {
         output: sourceTemplate,
       };
 
+      job.progress(25);
+
+
       const responseConvertPdfToXml = await DocumentConvert.convertPdfToXml(
         paramsConvertDocument
       );
@@ -112,6 +115,8 @@ export class DocumentTemplateService {
         data,
       };
 
+      job.progress(50);
+
       await this.replaceDocument(paramsReplaceDocument);
 
       const paramsConvertDocumentXmlToPdf = {
@@ -120,6 +125,7 @@ export class DocumentTemplateService {
       };
 
       const responseConvertXmlToPdf = await DocumentConvert.convertXmlToPdf(paramsConvertDocumentXmlToPdf);
+      job.progress(75);
 
       const paramsRmFolder = {
         source: responsePathTemp.data.path,

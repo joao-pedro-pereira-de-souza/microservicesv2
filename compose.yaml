@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9' # Atualize para a versão mais recente para suporte completo
 services:
   redis:
     image: redis:latest
@@ -7,6 +7,12 @@ services:
       REDIS_PASSWORD: ${DB_REDIS_PASSWORD}
     ports:
       - "${DB_REDIS_PORT}:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 256M # Limita a memória para 256MB
+          cpus: '0.50' # Limita a 50% de uma CPU
+
   api:
     build: ./api
     env_file:
@@ -15,13 +21,21 @@ services:
       - DB_REDIS_HOST=${DB_REDIS_HOST}
       - DB_REDIS_PORT=${DB_REDIS_PORT}
       - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}
+      - DATABASE_URL=file:/usr/src/app/dist/prisma/dev.db
     ports:
-      - "2031:3366"
+      - "2031:2031"
     depends_on:
       - job
       - redis
     volumes:
       - ./volumes/uploads:/usr/src/app/uploads
+    command: /bin/sh -c "npx prisma migrate deploy && npx prisma generate && npm run start:production"
+    deploy:
+      resources:
+        limits:
+          memory: 512M # Limita a memória para 512MB
+          cpus: '1.00' # Limita a 100% de uma CPU
+
   job:
     build: ./job
     ports:
@@ -34,9 +48,27 @@ services:
       - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}
     networks:
       - default
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.50'
+
   app:
     build: ./frontend
+    environment:
+      - NEXT_PUBLIC_DOMAIN_URL_API=http://api:2031
     ports:
       - "8080:8080"
+    depends_on:
+      - api
+      - job
+      - redis
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.00'
+
 networks:
   default:

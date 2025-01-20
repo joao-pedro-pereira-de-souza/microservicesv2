@@ -1,34 +1,23 @@
-ARG NODE_VERSION=20.16.0
+FROM node:22-alpine
 
-# Etapa 1: Construção
-FROM node:${NODE_VERSION}-alpine as builder
-
-# Define o diretório de trabalho
+# Diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos de dependências
+# Copiar o package.json e instalar as dependências
 COPY package.json package-lock.json ./
-
-# Instala as dependências
 RUN npm install
 
-# Copia o restante dos arquivos do projeto
+# Copiar todos os arquivos
 COPY . .
 
-# Constrói o projeto
+# Remover qualquer build anterior (caso exista)
+RUN rm -rf .next
+
+# Gerar o build do Next.js
 RUN npm run build
 
-# Etapa 2: Produção
-FROM node:${NODE_VERSION}-alpine
-
-# Define o diretório de trabalho
-WORKDIR /app
-
-# Copia os arquivos necessários da etapa de construção
-COPY --from=builder /app ./
-
-# Exponha a porta para o servidor Next.js
+# Expor a porta
 EXPOSE 8080
 
-# Comando para rodar a aplicação
+# Iniciar o servidor
 CMD ["npm", "start"]

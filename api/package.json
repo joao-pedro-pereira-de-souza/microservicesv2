@@ -5,7 +5,8 @@
   "scripts": {
     "start:dev": "ts-node-dev -r tsconfig-paths/register -r dotenv/config src/server.module.ts",
     "start:production": "node dist/server.module.js",
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored && babel prisma --extensions \".js,.ts\" --out-dir dist/prisma --copy-files --no-copy-ignored",
+    "build2": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored && babel prisma --extensions \".js,.ts\" --out-dir dist/prisma --copy-files --no-copy-ignored",
     "test": "clear && npx jest --injectGlobals false --runInBand -verbose tests/ ",
     "test:workflow": "clear && npx jest --bail --no-color --injectGlobals false --runInBand -verbose tests/ "
   },
@@ -24,6 +25,7 @@
   "license": "ISC",
   "description": "Setup v2 modules",
   "dependencies": {
+    "@prisma/client": "^6.1.0",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "bull": "^4.16.5",

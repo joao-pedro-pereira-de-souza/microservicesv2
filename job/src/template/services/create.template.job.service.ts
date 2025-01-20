@@ -12,13 +12,17 @@ export class CreateTemplateJobService {
 
     const data = job.data as CreateTemplateJobDTO;
 
-    const buffer_file = await UploadModule.download(data.template_url);
-    const dataDocument = await DocumentTemplateService.useTemplate({
+    job.progress(5)
+    const buffer_file = await UploadModule.download(
+      "https://firebasestorage.googleapis.com/v0/b/plataformssync.appspot.com/o/files%2Ftemplate2.pdf?alt=media&token=0f173c2d-abfa-4a18-bd84-b5324bc06263"
+    );
+    job.progress(10);
+
+    const dataDocument = await DocumentTemplateService.useTemplate(job,{
       file: buffer_file,
       data: data.variables,
     });
-
-    console.log({ dataDocument });
+    job.progress(100);
 
     return dataDocument;
   }

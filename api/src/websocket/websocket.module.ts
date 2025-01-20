@@ -6,15 +6,13 @@ export class WebSocketModule {
   static eventsName = {
     template: {
       templateCompleted: "create_template_completed",
+      progress: "create_template_progress",
     },
   };
 
-  constructor(
-    private readonly io: Server
-  ) {}
+  constructor(private readonly io: Server) {}
 
   static instance(io: Server) {
-
     io.on("connection", (socket) => {
       console.log("✅ Websocket connected");
       SocketsModule.inicialize(socket);
@@ -24,19 +22,26 @@ export class WebSocketModule {
       console.log("🌐 Websocket disconnected");
     });
 
-     const templateJobModule = new TemplateJobModule();
-     templateJobModule.queue.on("global:completed", (id, response) => {
-        const { data } = JSON.parse(response)
+    const templateJobModule = new TemplateJobModule();
+    templateJobModule.queue.on("global:completed", (id, response) => {
+      const { data } = JSON.parse(response);
 
-        const paramsEmit = {
-          data: {
-            file: Buffer.from(data.pdf),
-          },
-        };
+      console.log("======================= completed =================");
 
-        io.to(id).emit(this.eventsName.template.templateCompleted, paramsEmit);
-     });
+      const paramsEmit = {
+        data: {
+          file: Buffer.from(data.pdf),
+        },
 
+        response,
+      };
+
+      io.to(id).emit(this.eventsName.template.templateCompleted, paramsEmit);
+    });
+
+    templateJobModule.queue.on("global:progress", (id, response) => {
+       io.to(id).emit(this.eventsName.template.progress, response);
+    });
     return new WebSocketModule(io);
   }
 }

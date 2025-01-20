@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { Storage } from "../../../services/storage";
 import { ProgressBar, InputGroup, FormControl, Button } from "react-bootstrap";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useComponentListVariable } from "../../components/listVariables/list.variables";
+import { useComponentListVariable } from "../../../../teste/listVariables/list.variables";
 import { TemplateService } from './services';
 import { useState } from "react";
 
@@ -19,11 +19,7 @@ export default function Home() {
   const data = storage.template.get();
   const find = data.items.find((item) => item.id === id);
   const [progressValue, setProgressValue] = useState(0);
-  const [pdfOutput, setPdfOutput] = useState('');
-
-
-
-  const now = 60;
+  const [pdfOutput, setPdfOutput] = useState<File | null>(null);
 
   const {
     items,
@@ -38,21 +34,14 @@ export default function Home() {
     setIsTemplateUsed
   } = useComponentListVariable();
 
-  // const templateService = new TemplateService(
-  //   find!.url,
-  //   variables,
-  //   setIsTemplateUsed,
-  //   setProgressValue,
-  //   setPdfOutput
-  // );
-
     const templateService = new TemplateService(
       {
         urlPdf: find!.url,
         variables,
         setIsTemplateUsed,
         setPdfOutput,
-        setProgressValue
+        setProgressValue,
+        pdfOutput
       }
     );
 
@@ -120,21 +109,31 @@ export default function Home() {
             </Button>
             <div className={styles.container_progressbar}>
               {isTemplateUsed ? (
-                <ProgressBar now={progressValue} label={`${now}%`} />
+                <ProgressBar now={progressValue} label={`${progressValue}%`} />
               ) : (
                 <p style={{ textAlign: "center" }}>
                   Nenhum evento sendo executado...
                 </p>
               )}
             </div>
-            {pdfOutput.length ? (
-              <Document
-                file={find?.url}
-                loading="Carregando pré-visualização..."
-                error="Erro ao carregar PDF"
-              >
-                <Page pageNumber={1} height={300} />
-              </Document>
+            {pdfOutput ? (
+              <div>
+                <Document
+                  file={pdfOutput}
+                  loading="Carregando pré-visualização..."
+                  error="Erro ao carregar PDF"
+                >
+                  <Page pageNumber={1} height={300} />
+                </Document>
+
+                <Button
+                  className={styles.button_create_pdf}
+                  variant="outline-success"
+                  onClick={() => templateService.handleDownload()}
+                >
+                 Download
+                </Button>
+              </div>
             ) : null}
           </div>
         </div>

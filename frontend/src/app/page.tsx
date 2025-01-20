@@ -1,22 +1,10 @@
-
 "use client";
 
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import dynamic from "next/dynamic";
 
-import Index from "./pages/index/index";
-import Template from "./pages/template/template";
+// Carregar o componente App dinamicamente no cliente
+const App = dynamic(() => import("./app"), { ssr: false });
 
-
-const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/templates/:id" element={<Template />} />
-      </Routes>
-    </Router>
-  );
-};
-
-export default App;
+export default function MyApp() {
+  return <App />;
+}

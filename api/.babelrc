@@ -24,11 +24,12 @@
           "@upload": "./src/upload",
           "@bull": "./src/bull",
           "@root": "./",
+          "@prisma": "./dist/prisma",
           "@src": "./src"
-        }
+        },
+        "extensions": [".js", ".ts", ".json"]
       }
     ]
   ],
-
   "ignore": ["**/*.test.ts"]
 }

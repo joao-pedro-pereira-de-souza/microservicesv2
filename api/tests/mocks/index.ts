@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { Express, Response } from "express";
+import { Express, Response } from "express"
 
 export function CreateMockModuleExpress() {
   const appMock = {

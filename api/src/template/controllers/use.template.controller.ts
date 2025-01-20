@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ValidationSchemaService } from "@schema/validation.schema.service";
 import { UnprocessableEntityError } from "@error/erros.mudule";
-import { schema, schemaInterface } from "../schemas/create.template.schema";
-import TemplatesRepository from '../repositories/templates.repository';
+import { schema } from "../schemas/use.template.schema";
+import { TemplateJobModule } from "../template.job.module";
 
-export class CreateTemplateController {
+export class UseTemplateController {
   async execute(
     req: Request<any, any, any, any>,
     res: Response,
@@ -16,13 +16,15 @@ export class CreateTemplateController {
         throw new UnprocessableEntityError("Dados inválido", validation.data);
       }
 
-      const body: schemaInterface = req.body;
+      const body = req.body;
+      const templateJobModule = new TemplateJobModule();
 
-      const templates = await TemplatesRepository.create({ url: body.template_url });
+      const job = await templateJobModule.queue.add(body);
 
+      console.log({job})
       return res.status(201).json({
-        message: "Template created successfully",
-        items: templates,
+        message: "Solicitação para usar o template efetuado com sucesso",
+        items: job,
       });
     } catch (error) {
       next(error);
