@@ -18,6 +18,8 @@ services:
     env_file:
       - ./api/.env
     environment:
+      - PORT=2031
+      - HOST=localhost
       - DB_REDIS_HOST=${DB_REDIS_HOST}
       - DB_REDIS_PORT=${DB_REDIS_PORT}
       - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}
@@ -29,6 +31,7 @@ services:
       - redis
     volumes:
       - ./volumes/uploads:/usr/src/app/uploads
+      - ./volumes/prisma/dev.db:/usr/src/app/dist/prisma/dev.db
     command: /bin/sh -c "npx prisma migrate deploy && npx prisma generate && npm run start:production"
     deploy:
       resources:
@@ -39,10 +42,12 @@ services:
   job:
     build: ./job
     ports:
-      - "2024:3366"
+      - "2024:2024"
     depends_on:
       - redis
     environment:
+      - PORT=2024
+      - API_PORT=2031
       - DB_REDIS_HOST=${DB_REDIS_HOST}
       - DB_REDIS_PORT=${DB_REDIS_PORT}
       - DB_REDIS_PASSWORD=${DB_REDIS_PASSWORD}

@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "ts-node-dev -r tsconfig-paths/register -r dotenv/config src/server.module.ts",
+    "seeds:dev": "ts-node-dev -r tsconfig-paths/register -r dotenv/config prisma/seeds/index.ts",
     "start:production": "node dist/server.module.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored && babel prisma --extensions \".js,.ts\" --out-dir dist/prisma --copy-files --no-copy-ignored",
     "build2": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored && babel prisma --extensions \".js,.ts\" --out-dir dist/prisma --copy-files --no-copy-ignored",

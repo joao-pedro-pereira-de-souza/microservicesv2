@@ -29,7 +29,8 @@ export class AppServer {
 
     app.use(cookieParser(process.env.SIGNATURE_COOKIE));
 
-    app.use("/uploads", express.static(UploadsModule.path_public));
+    const uploadsModule = new UploadsModule();
+    app.use("/uploads", express.static(uploadsModule.path_public));
 
     if (
       !RateLimitedMiddlewareService.unlimitedEnvironments.includes(

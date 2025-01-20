@@ -9,7 +9,7 @@ datasource db {
 
 model Templates {
   id  String @id @unique @default(uuid())
-  url String
+  url String @unique
 
   @@map("templates")
 }

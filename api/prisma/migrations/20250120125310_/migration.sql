@@ -6,3 +6,6 @@ CREATE TABLE "templates" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "templates_id_key" ON "templates"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "templates_url_key" ON "templates"("url");

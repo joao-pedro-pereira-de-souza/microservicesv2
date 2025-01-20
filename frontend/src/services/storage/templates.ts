@@ -1,6 +1,7 @@
 interface Item {
   id: string;
   url: string;
+  base: string;
 }
 
 interface DataGet {

@@ -18,12 +18,35 @@ export class TemplatesRepository {
     return this.prisma.templates.findMany();
   }
 
+  async listManyByTemplates( limit: number, page: number) {
+    const items = await this.prisma.templates.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    const totalItems = await prisma.templates.count();
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      total_items: totalItems,
+      total_pages: totalPages,
+      items,
+    };
+  }
+
   async create(template: { url: string }) {
     return this.prisma.templates.create({
       data: template,
     });
   }
 
+  async upsert(templates: { url: string }) {
+    return this.prisma.templates.upsert({
+      where: { url: templates.url },
+      update: { url: templates.url },
+      create: { url: templates.url },
+    });
+  }
   async update(id: string, template: { url: string }) {
     return this.prisma.templates.update({
       where: { id },
@@ -33,7 +56,7 @@ export class TemplatesRepository {
 
   async delete(id: string) {
     return this.prisma.templates.delete({
-      where: { id }
+      where: { id },
     });
   }
 }

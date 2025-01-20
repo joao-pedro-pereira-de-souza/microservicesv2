@@ -12,10 +12,12 @@ export class CreateTemplateJobService {
 
     const data = job.data as CreateTemplateJobDTO;
 
+    const url = data.template_url
+      .replace("${host}", "api")
+      .replace("${port}", String(process.env.API_PORT));
+
     job.progress(5)
-    const buffer_file = await UploadModule.download(
-      "https://firebasestorage.googleapis.com/v0/b/plataformssync.appspot.com/o/files%2Ftemplate2.pdf?alt=media&token=0f173c2d-abfa-4a18-bd84-b5324bc06263"
-    );
+    const buffer_file = await UploadModule.download(url);
     job.progress(10);
 
     const dataDocument = await DocumentTemplateService.useTemplate(job,{

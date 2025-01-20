@@ -37,6 +37,7 @@ export default function Home() {
     const templateService = new TemplateService(
       {
         urlPdf: find!.url,
+        basePdf: find!.base,
         variables,
         setIsTemplateUsed,
         setPdfOutput,

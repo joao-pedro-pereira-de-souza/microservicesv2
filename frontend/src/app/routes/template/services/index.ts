@@ -4,6 +4,7 @@ import { SocketService } from '../../../../services/socket';
 
 interface Input {
   urlPdf: string;
+  basePdf: string;
   variables: object;
   setIsTemplateUsed: Dispatch<SetStateAction<boolean>>;
   setProgressValue: Dispatch<SetStateAction<number>>;
@@ -25,7 +26,7 @@ export class TemplateService {
 
       this.params.setIsTemplateUsed(true);
       const paramsUse = {
-        template_url: this.params.urlPdf,
+        template_url: this.params.basePdf,
         variables: this.params.variables,
       };
       const response = await api.template.use(paramsUse);
