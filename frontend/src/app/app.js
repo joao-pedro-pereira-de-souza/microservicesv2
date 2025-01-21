@@ -3,8 +3,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Index from "./routes/index/index";
-import Template from "./routes/template/template";
+import Index from "./pages/index/index";
+import Template from "./pages/template/template";
 
 const App = () => {
   return (

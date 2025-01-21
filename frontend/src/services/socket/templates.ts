@@ -1,6 +1,6 @@
 import {  Socket } from "socket.io-client";
 import type { DefaultEventsMap } from "@socket.io/component-emitter/lib/cjs/index.d.ts";
-import {TemplateService} from '../../app/routes/template/services'
+import {TemplateService} from '../../app/pages/template/services'
 
 export class SocketTemplateService {
   constructor(

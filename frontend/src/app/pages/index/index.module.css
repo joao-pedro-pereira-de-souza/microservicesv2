@@ -72,8 +72,8 @@
 }
 
 .option_question{
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
 
   border-radius: 50%;
   background: var(--foreground);
@@ -100,7 +100,7 @@
 
 .container_example {
   width: 100%;
-  height: 150vh;
+  height: 90vh;
   background: var(--foreground);
   z-index: 2;
   /* background-color: #fff; */
@@ -132,4 +132,15 @@
   width: 100%;
   height: 10rem;
   background: var(--background);
+}
+
+.image_preview {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 15px;
+  opacity: 0.8;
 }

@@ -62,16 +62,4 @@ export class TemplateService {
     }
   }
 
-  handleDownload() {
-    if (!this.params.pdfOutput) return;
-
-      const url = URL.createObjectURL(this.params.pdfOutput);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = this.params.pdfOutput.name;
-      link.click();
-
-      // Libera o URL criado
-      URL.revokeObjectURL(url);
-  }
 }
