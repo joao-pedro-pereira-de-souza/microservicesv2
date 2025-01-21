@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Api } from '../../../services/api';
 
 import { Storage } from '../../../services/storage';
-const PdfList = dynamic(() => import("../../../../teste/pdfList/pdf.list"), {
+const PdfList = dynamic(() => import("../../components/pdfList/pdf.list"), {
   ssr: false,
 });
 
@@ -75,8 +75,8 @@ export default  function Home() {
                 aria-hidden
                 src="/github.svg"
                 alt="Globe icon"
-                width={35}
-                height={35}
+                width={55}
+                height={55}
               ></Image>
             </a>
 
@@ -101,12 +101,25 @@ export default  function Home() {
         </div>
       </main>
       <div className={styles.container_example}>
-        <h1>super teste</h1>
+
+        <h1 style={{textAlign: 'center', zIndex: 2, marginBottom: '10px', position: 'relative'}}>Preview</h1>
+        <Image
+          className={styles.image_preview}
+          aria-hidden
+          src="/preview-template.png"
+          alt="Preview template"
+          width={1500}
+          height={800}
+        />
       </div>
 
       <div className={styles.container_templates}>
         <h1>Templates </h1>
-         {Object.keys(templateList).length ? <PdfList pdfUrls={(templateList as any).items } navigate={navigate} />: <p>Teste</p> }
+        {Object.keys(templateList).length ? (
+          <PdfList pdfUrls={(templateList as any).items} navigate={navigate} />
+        ) : (
+          <p>Teste</p>
+        )}
       </div>
 
       <footer className={styles.footer}></footer>

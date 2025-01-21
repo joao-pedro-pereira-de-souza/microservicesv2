@@ -5,8 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useParams } from "react-router-dom";
 import { Storage } from "../../../services/storage";
 import { ProgressBar, InputGroup, FormControl, Button } from "react-bootstrap";
-import { Document, Page, pdfjs } from "react-pdf";
-import { useComponentListVariable } from "../../../../teste/listVariables/list.variables";
+import {  pdfjs } from "react-pdf";
+import { useComponentListVariable } from "../../components/listVariables/list.variables";
 import { TemplateService } from './services';
 import { useState } from "react";
 
@@ -51,13 +51,12 @@ export default function Home() {
     <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.container_view_pdf}>
-          <Document
-            file={find?.url}
-            loading="Carregando pré-visualização..."
-            error="Erro ao carregar PDF"
-          >
-            <Page pageNumber={1} height={300} />
-          </Document>
+          <iframe
+            src={find?.url}
+            width="600"
+            height="780"
+            style={{ border: "none" }}
+          ></iframe>
         </div>
 
         <div className={styles.container_variables}>
@@ -118,22 +117,13 @@ export default function Home() {
               )}
             </div>
             {pdfOutput ? (
-              <div>
-                <Document
-                  file={pdfOutput}
-                  loading="Carregando pré-visualização..."
-                  error="Erro ao carregar PDF"
-                >
-                  <Page pageNumber={1} height={300} />
-                </Document>
-
-                <Button
-                  className={styles.button_create_pdf}
-                  variant="outline-success"
-                  onClick={() => templateService.handleDownload()}
-                >
-                 Download
-                </Button>
+              <div className={styles.container_pdf_output}>
+                <iframe
+                  src={URL.createObjectURL(pdfOutput)}
+                  width="600"
+                  height="780"
+                  style={{ border: "none" }}
+                ></iframe>
               </div>
             ) : null}
           </div>
